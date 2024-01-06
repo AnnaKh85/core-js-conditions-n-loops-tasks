@@ -152,8 +152,43 @@ function convertToRomanNumerals(num) {
  *  '10,5'    => 'one zero point five'
  *  '1950.2'  => 'one nine five zero point two'
  */
-function convertNumberToString(/* numberStr */) {
-  throw new Error('Not implemented');
+function convertNumberToString(numberStr) {
+  let result = '';
+  let isDecimalPointAdded = false;
+
+  for (let i = 0; i < numberStr.length; i += 1) {
+    const char = numberStr[i];
+
+    if (char === '-') {
+      result += 'minus ';
+    } else if (char === ',' || char === '.') {
+      if (!isDecimalPointAdded) {
+        result += 'point ';
+        isDecimalPointAdded = true;
+      }
+    } else {
+      const digit = parseInt(char, 10);
+
+      if (!Number.isNaN(digit)) {
+        if (digit === 0) result += 'zero ';
+        else if (digit === 1) result += 'one ';
+        else if (digit === 2) result += 'two ';
+        else if (digit === 3) result += 'three ';
+        else if (digit === 4) result += 'four ';
+        else if (digit === 5) result += 'five ';
+        else if (digit === 6) result += 'six ';
+        else if (digit === 7) result += 'seven ';
+        else if (digit === 8) result += 'eight ';
+        else if (digit === 9) result += 'nine ';
+      }
+    }
+  }
+
+  if (result.length > 0) {
+    result = result.substring(0, result.length - 1);
+  }
+
+  return result;
 }
 
 /**
@@ -288,8 +323,53 @@ function getBalanceIndex(arr) {
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  throw new Error('Not implemented');
+function getSpiralMatrix(size) {
+  if (size <= 0) {
+    return [];
+  }
+
+  const matrix = new Array(size);
+  for (let i = 0; i < size; i += 1) {
+    matrix[i] = new Array(size);
+  }
+
+  let num = 1;
+  let top = 0;
+  let bottom = size - 1;
+  let left = 0;
+  let right = size - 1;
+
+  while (top <= bottom && left <= right) {
+    for (let i = left; i <= right; i += 1) {
+      matrix[top][i] = num;
+      num += 1;
+    }
+    top += 1;
+
+    for (let i = top; i <= bottom; i += 1) {
+      matrix[i][right] = num;
+      num += 1;
+    }
+    right -= 1;
+
+    if (top <= bottom) {
+      for (let i = right; i >= left; i -= 1) {
+        matrix[bottom][i] = num;
+        num += 1;
+      }
+      bottom -= 1;
+    }
+
+    if (left <= right) {
+      for (let i = bottom; i >= top; i -= 1) {
+        matrix[i][left] = num;
+        num += 1;
+      }
+      left += 1;
+    }
+  }
+
+  return matrix;
 }
 
 /**
@@ -307,8 +387,33 @@ function getSpiralMatrix(/* size */) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
+function rotateMatrix(matrix) {
+  if (!matrix || matrix.length === 0 || matrix[0].length === 0) {
+    return [];
+  }
+
+  const n = matrix.length;
+
+  const rotatedMatrix = new Array(n);
+  for (let i = 0; i < n; i += 1) {
+    rotatedMatrix[i] = new Array(n);
+  }
+
+  for (let i = 0; i < n; i += 1) {
+    for (let j = 0; j < n; j += 1) {
+      rotatedMatrix[j][i] = matrix[i][j];
+    }
+  }
+
+  for (let i = 0; i < n; i += 1) {
+    for (let j = 0; j < n / 2; j += 1) {
+      const temp = rotatedMatrix[i][j];
+      rotatedMatrix[i][j] = rotatedMatrix[i][n - 1 - j];
+      rotatedMatrix[i][n - 1 - j] = temp;
+    }
+  }
+
+  return rotatedMatrix;
 }
 
 /**
